@@ -3,6 +3,7 @@ import os
 import re
 import logging
 from urllib.parse import urlparse, parse_qs
+from scrapy_playwright.page import PageMethod
 from datetime import datetime
 from .RentSpider import RentSpider
 
@@ -93,7 +94,7 @@ class RightmoveSpider(RentSpider):
         return scrapy.Request(
             url=url,
             callback=self.parse,
-            meta=dict(postcode=postcode, location_id=location_id, playwright=True)
+            meta=dict(postcode=postcode, location_id=location_id, playwright=True, playwright_page_methods=[PageMethod("goto", url, timeout=60000)]) # `playwright_page_methods` used for setting timeout
         )
     
     def _process_batch(self, response):
